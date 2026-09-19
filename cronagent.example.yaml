@@ -1,0 +1,33 @@
+# cronagent example configuration.
+# Copy to cronagent.yaml (or run `cronagent init`) and edit.
+# Run data is archived under .cronagent/ next to this file.
+
+agentDefaults:
+  timeoutMinutes: 30        # default kill-timeout for every job (job.timeoutMinutes overrides)
+
+jobs:
+  # Demo job - uses the bundled fake agent so everything works out of the box.
+  - name: demo-job
+    schedule: "*/2 * * * *" # every second minute
+    prompt: "Check package.json for outdated deps; open a branch with safe upgrades."
+    agent: 'node demo/fake-agent.js "{{prompt}}"'
+    enabled: true
+
+  # --- Real agents: uncomment and edit -------------------------------------
+  # Claude Code, headless. cwd is resolved relative to this config file.
+  # - name: bump-deps
+  #   schedule: "0 9 * * 1" # Mondays 09:00
+  #   prompt: "Check package.json for outdated deps; open a branch with safe upgrades."
+  #   agent: 'claude -p "{{prompt}}"'
+  #   cwd: ../myrepo
+  #   timeoutMinutes: 45
+
+  # Long/multi-line prompt: {{promptFile}} writes the prompt to the run dir and
+  # substitutes the file path - best for agents with a --message-file style flag.
+  # - name: weekly-audit
+  #   schedule: "30 8 * * 5" # Fridays 08:30
+  #   prompt: |
+  #     Audit dependencies for security advisories and license changes.
+  #     Produce a summary and open a PR if anything needs action.
+  #   agent: 'aider --yes-always --message-file {{promptFile}}'
+  #   cwd: ../myrepo

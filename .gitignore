@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.cronagent/
+cronagent.yaml
+*.log
