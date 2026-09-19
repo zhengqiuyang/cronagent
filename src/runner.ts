@@ -201,18 +201,23 @@ function killTree(child: ChildProcess): void {
       // best effort
     }
   } else {
-    try {
-      child.kill("SIGTERM");
-    } catch {
-      // already gone
-    }
-    const killer = setTimeout(() => {
+    // The child is a process-group leader (spawned detached), so -pid signals
+    // the shell AND its descendants.
+    const pgid = child.pid;
+    const killGroup = (sig: NodeJS.Signals): void => {
+      if (pgid === undefined) return;
       try {
-        child.kill("SIGKILL");
+        process.kill(-pgid, sig);
       } catch {
-        // already gone
+        try {
+          child.kill(sig);
+        } catch {
+          // already gone
+        }
       }
-    }, 5000);
+    };
+    killGroup("SIGTERM");
+    const killer = setTimeout(() => killGroup("SIGKILL"), 5000);
     killer.unref();
   }
 }
@@ -245,6 +250,10 @@ export async function runJob(job: JobConfig, config: CronAgentConfig): Promise<R
     cwd,
     env: { ...process.env },
     windowsHide: true,
+    // POSIX: make the shell its own process group so a timeout can kill the
+    // whole tree — killing just /bin/sh orphans the real agent, which holds
+    // the output pipes and keeps the close event from ever firing.
+    detached: process.platform !== "win32",
   });
 
   const cap = new OutputCap();
