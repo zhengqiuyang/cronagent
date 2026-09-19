@@ -1,5 +1,7 @@
 # cronagent
 
+[![CI](https://github.com/zhengqiuyang/cronagent/actions/workflows/ci.yml/badge.svg)](https://github.com/zhengqiuyang/cronagent/actions/workflows/ci.yml)
+
 > **The vendor-neutral scheduler for AI coding agents** — run *any* headless agent CLI on cron, archive every run, generate an HTML report.
 
 Teams increasingly hand their repositories to headless coding agents (`claude -p`,
