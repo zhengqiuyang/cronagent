@@ -1,37 +1,34 @@
 {
   "name": "cronagent",
   "version": "0.1.0",
-  "description": "cron for AI coding agents: run headless CLI agents (claude -p, opencode, aider, or any shell command) on a schedule, archive every run, generate an HTML report.",
+  "description": "Vendor-neutral cron scheduler for AI coding agents — any CLI, run archive, HTML reports",
   "type": "module",
   "license": "MIT",
   "bin": {
     "cronagent": "dist/src/cli.js"
   },
   "files": [
-    "dist/src",
+    "dist",
     "demo",
-    "cronagent.example.yaml",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node run-tests.mjs",
-    "demo": "node demo/fake-agent.js"
+    "demo": "node demo/fake-agent.js",
+    "prepublishOnly": "npm run build && npm test"
   },
   "keywords": [
+    "ai-agents",
+    "cli",
     "cron",
     "scheduler",
-    "ai",
-    "coding-agent",
-    "claude-code",
-    "opencode",
-    "aider",
     "automation",
-    "cli"
+    "claude-code"
   ],
   "engines": {
-    "node": ">=18.17"
+    "node": ">=20"
   },
   "dependencies": {
     "yaml": "^2.6.0"
@@ -39,5 +36,9 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "typescript": "^5.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhengqiuyang/cronagent.git"
   }
 }
