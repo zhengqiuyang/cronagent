@@ -3,3 +3,4 @@ dist/
 .cronagent/
 cronagent.yaml
 *.log
+.agent-attest/keys/
